@@ -4,14 +4,14 @@ import urequests
 from time import sleep
 from machine import Pin
 
-def main():
+def boot():
     lprint('nuggetBOOTv1.0.0Connecting...')
     do_connect()
     lprint('nuggetBOOTv1.0.0Connected!')
     sleep(1)
     lprint('nuggetBOOTv1.0.0Downloading OS..')
     response = urequests.get('https://raw.githubusercontent.com/egalletta/nugget/master/node/main.py')
-    f = open('payload.py', 'w')
+    f = open('main.py', 'w')
     f.write(response.text)
     f.close()
     lprint('nuggetBOOTv1.0.0Running..')
@@ -42,4 +42,4 @@ def lprint(s):
     sleep(0.15)
     lcd.putstr(s)
 
-main()
+boot() 
