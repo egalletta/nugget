@@ -1,12 +1,18 @@
 import network
+from nodemcu_gpio_lcd import GpioLcd
 import urequests
-
+from time import sleep
 def main():
+    lprint('nuggetBOOTv1.0.0Connecting...')
     do_connect()
+    lprint('nuggetBOOTv1.0.0Connected!')
+    sleep(1)
+    lprint('nuggetBOOTv1.0.0Downloading OS..')
     response = urequests.get('https://raw.githubusercontent.com/egalletta/nugget/master/node/payload.py')
     f = open('payload.py', 'w')
     f.write(response.text)
     f.close()
+    lprint('nuggetBOOTv1.0.0Running..')
     run()
 
 def do_connect():
@@ -14,10 +20,19 @@ def do_connect():
     if not sta_if.isconnected():
         print('connecting to network...')
         sta_if.active(True)
-        sta_if.connect('BlueberryNet', 'RedSox1$')
+        f = open('wifi_pw')
+        pw = f.read()
+        f.close()
+        sta_if.connect('BlueberryNet', pw)
         while not sta_if.isconnected():
             pass
     print('network config:', sta_if.ifconfig())
+
+def lprint(s):
+    print(s)
+    lcd.clear()
+    sleep(0.15)
+    lcd.putstr(s)
 
 def run():
     import payload
