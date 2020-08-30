@@ -45,6 +45,6 @@ def lprint(s):
 
 def run():
     import payload
-    payload.run()
+    payload.start()
 
 main()
