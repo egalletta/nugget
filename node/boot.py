@@ -3,9 +3,9 @@ from nodemcu_gpio_lcd import GpioLcd
 import urequests
 from time import sleep
 from machine import Pin
+import ubinascii
 
 def boot():
-    lprint('nuggetBOOTv1.0.0Connecting...')
     do_connect()
     lprint('nuggetBOOTv1.0.0Connected!')
     sleep(1)
@@ -17,14 +17,20 @@ def boot():
     lprint('nuggetBOOTv1.0.0Running..')
 
 def do_connect():
+    lprint('nuggetBOOTv1.0.0Connecting...')
     sta_if = network.WLAN(network.STA_IF)
+    mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
+    lprint(mac + "    Connecting...")
     if not sta_if.isconnected():
         print('connecting to network...')
         sta_if.active(True)
+        f = open('wifi_ssid')
+        ssid = f.read()
+        f.close()
         f = open('wifi_pw')
         pw = f.read()
         f.close()
-        sta_if.connect('BlueberryNet', pw)
+        sta_if.connect(ssid, pw)
         while not sta_if.isconnected():
             pass
     print('network config:', sta_if.ifconfig())
