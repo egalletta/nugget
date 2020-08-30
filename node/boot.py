@@ -2,6 +2,8 @@ import network
 from nodemcu_gpio_lcd import GpioLcd
 import urequests
 from time import sleep
+from machine import Pin
+
 def main():
     lprint('nuggetBOOTv1.0.0Connecting...')
     do_connect()
