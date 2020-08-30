@@ -22,5 +22,4 @@ def lprint(s):
     sleep(0.15)
     lcd.putstr(s)
 
-if __name__ == '__main__':
-    run()
+start()

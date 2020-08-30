@@ -10,12 +10,11 @@ def main():
     lprint('nuggetBOOTv1.0.0Connected!')
     sleep(1)
     lprint('nuggetBOOTv1.0.0Downloading OS..')
-    response = urequests.get('https://raw.githubusercontent.com/egalletta/nugget/master/node/payload.py')
+    response = urequests.get('https://raw.githubusercontent.com/egalletta/nugget/master/node/main.py')
     f = open('payload.py', 'w')
     f.write(response.text)
     f.close()
     lprint('nuggetBOOTv1.0.0Running..')
-    run()
 
 def do_connect():
     sta_if = network.WLAN(network.STA_IF)
@@ -42,9 +41,5 @@ def lprint(s):
     lcd.clear()
     sleep(0.15)
     lcd.putstr(s)
-
-def run():
-    import payload
-    payload.start()
 
 main()
