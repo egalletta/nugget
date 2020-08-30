@@ -1,6 +1,7 @@
+from nodemcu_gpio_lcd import GpioLcd
 import urequests
 from time import sleep
-from boot import lprint
+from machine import Pin
 
 def start():
     while True:
