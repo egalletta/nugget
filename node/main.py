@@ -6,10 +6,10 @@ from machine import Pin
 def start():
     while True:
         req = urequests.get('http://n-u-g-g-e-t.herokuapp.com/motd')
-        lprint(req.text)
-        sleep(5)
+        for message in req['message-list']:
+            lprint(message.text, 5)
 
-def lprint(s):
+def lprint(text: str, delay: float):
     lcd = GpioLcd(rs_pin=Pin(16),
                   enable_pin=Pin(5),
                   d4_pin=Pin(4),
@@ -17,9 +17,19 @@ def lprint(s):
                   d6_pin=Pin(2),
                   d7_pin=Pin(14),
                   num_lines=2, num_columns=16)
-    print(s)
-    lcd.clear()
-    sleep(0.15)
-    lcd.putstr(s)
+    if len(text) <= 32:
+        print(text)
+        lcd.clear()
+        sleep(0.15)
+        lcd.putstr(text)
+        sleep(delay)
+    else:
+        to_display = text[:32]
+        print(to_display)
+        lcd.clear()
+        sleep(0.15)
+        lcd.putstr(to_display)
+        sleep(delay)
+        lprint(text[32:], delay)
 
 start()
