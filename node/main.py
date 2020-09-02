@@ -7,7 +7,7 @@ def start():
     while True:
         req = urequests.get('http://n-u-g-g-e-t.herokuapp.com/motd').json()
         for message in req['message-list']:
-            lprint(message.text, 5)
+            lprint(message, 5)
 
 def lprint(text: str, delay: float):
     lcd = GpioLcd(rs_pin=Pin(16),
