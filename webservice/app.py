@@ -2,18 +2,29 @@ from flask import Flask, request
 from flask_pymongo import PyMongo
 import os
 import requests
+import time
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.environ.get('MONGOSTR')
 mongo = PyMongo(app)
 WEATHER_API_KEY = os.environ.get('WEATHER_KEY')
 
+cached_weather = {
+    'time': None,
+    'report': None
+}
+
 @app.route('/motd', methods=['GET'])
 def motd():
     filt = {'target' : 'node-nora'}
     motd = mongo.db.messages.find_one(filt)
     message_list = motd['message-list']
-    weather_data = weather()
+
+    if cached_weather['report'] is None or (time.time() - cached_weather['time']) >= 180:
+        cached_weather['time'] = time.time()
+        cached_weather['report'] = weather()
+        
+    weather_data = cached_weather['report']
     current_temp = int(round(weather_data['current']['feels_like']))
     high = int(round(weather_data['daily'][0]['temp']['max']))
     low = int(round(weather_data['daily'][0]['temp']['min']))
