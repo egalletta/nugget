@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>nuggetManager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.min.css">
+    <script>
+        var counter = 1;
+
+        var limit = 10;
+
+        function addInput(divName){
+
+            if (counter == limit)  {
+
+                alert("You have reached the limit of adding " + counter + " inputs");
+
+            }
+
+            else {
+
+                var newdiv = document.createElement('div');
+                newdiv.className = "form-group"
+                newdiv.setAttribute("id", "messages")
+                newdiv.innerHTML = "<input class='form-control' type='text' id='additional_message' name='additional_message' placeholder='Blank boxes will be omitted'>";
+
+                document.getElementById(divName).appendChild(newdiv);
+
+                counter++;
+
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Start: Nav-header -->
+        <div class="row">
+            <div class="col">
+                <!-- Start: Navigation with Button -->
+                <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+                    <div class="container"><a class="navbar-brand" href="#" style="font-size: 31px;">nuggetManager</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                        <div
+                            class="collapse navbar-collapse" id="navcol-1">
+                            <ul class="nav navbar-nav mr-auto">
+                                <li class="nav-item" role="presentation"></li>
+                                <li class="nav-item" role="presentation"></li>
+                            </ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="/logout">Log Out</a></span></div>
+            </div>
+            </nav>
+            <!-- End: Navigation with Button -->
+        </div>
+    </div>
+    <!-- End: Nav-header -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-primary" role="alert">
+        <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <!-- Start: My Nuggets -->
+    <div class="row" style="padding-top: 12px;">
+        <div class="col">
+            <h3>My Nuggets</h3>
+        </div>
+    </div>
+    <!-- End: My Nuggets -->
+    <!-- Start: My Nugget Content -->
+    <div class="row" style="padding-bottom: 30px;">
+        {% for n in my_nuggets %}
+        {% if my_nuggers|length == 0 %}
+        <p>No nuggets found!</p>
+        {% endif %}
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{ n.name }}</h4>
+                    <form>
+                        <div class="form-group">
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Enable Weather Forecast</label></div>
+                        </div>
+                        <div class="form-group"><label>Latitude:</label><input class="form-control" type="text"></div>
+                        <div class="form-group"><label>Longitude:</label><input class="form-control" type="text"></div>
+                        <div class="form-group"><label>Message Delay (seconds between each message):</label><input class="form-control" type="number"></div><button class="btn btn-primary" type="button">Save Changes</button></form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- End: My Nugget Content -->
+    <!-- Start: My Managed Nuggets -->
+    <div class="row" style="padding-top: 12px;">
+        <div class="col">
+            <h3>My Managed Nuggets</h3>
+        </div>
+    </div>
+    <!-- End: My Managed Nuggets -->
+    <!-- Start: My Managed Nuggets -->
+    <div class="row" style="padding-bottom: 100px;">
+        {% for nugget in managed_nuggets %}
+        {% if managed_nuggets|length < 1 %}
+        <p>No nuggets found!</p>
+        {% endif %}
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{ nugget.name }}</h4>
+                    <h6 class="card-subtitle"> for {{ nugget.assignee }}</h6>
+                    <form action="/update/{{ nugget.id }}" method='POST'>
+                        <div id='message-form'>
+                            {% for message in nugget.message_list %}
+                            <div class="form-group"><input class="form-control" id ="{{ message }}" name="{{ message }}" type="text" value="{{ message }}" placeholder='Blank boxes will be omitted'></div>
+                            {% endfor %}
+                        </div>
+                        <button class="btn btn-primary" type="button" onClick="addInput('message-form');" style="width: 62px;height: 37px;">Add</button>
+                        <button
+                            class="btn btn-primary" type="submit">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- End: My Managed Nuggets -->
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
