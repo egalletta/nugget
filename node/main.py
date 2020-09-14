@@ -6,10 +6,8 @@ import ubinascii
 
 def start():
     while True:
-        data = {
-            'mac': ubinascii.hexlify(network.WLAN().config('mac'),':').decode()
-        }
-        req = urequests.get('http://n-u-g-g-e-t.herokuapp.com/motd', json=data).json()
+        mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
+        req = urequests.get('http://n-u-g-g-e-t.herokuapp.com/motd?mac=' + mac)
         for message in req['message-list']:
             lprint(message, 5)
 
