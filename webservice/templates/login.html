@@ -18,6 +18,17 @@
   <body class="text-center">
     <form class="form-signin" action="/login" method='POST'>
       <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="alert alert-primary" role="alert">
+          <ul class=flashes>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+      </div>
+      {% endif %}
+      {% endwith %}
       <h1 class="h3 mb-3 font-weight-normal">Sign in to use Nugget</h1>
       <label for="username" class="sr-only">Email Address</label>
       <input type="email" id="username" name="username" class="form-control" placeholder="Email address" required autofocus>

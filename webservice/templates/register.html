@@ -18,13 +18,24 @@
   <body class="text-center">
     <form class="form-signin" action="/register" method='POST'>
       <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="alert alert-primary" role="alert">
+          <ul class=flashes>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+      </div>
+      {% endif %}
+      {% endwith %}
       <h1 class="h3 mb-3 font-weight-normal">Register for Nugget</h1>
       <label for="username" class="sr-only">Email Address</label>
       <input type="email" id="username" name="username" class="form-control" placeholder="Email address" required autofocus>
       <label for="password" class="sr-only">Password</label>
       <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
       <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password" required>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
     </form>
   </body>

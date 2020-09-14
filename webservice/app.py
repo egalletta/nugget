@@ -72,6 +72,7 @@ def register():
         if lookup_user is None:
             new_user = User(username=username, password=bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))
             new_user.save()
+            flash('Successfully Registered; Please log in')
             return redirect(url_for('login'))
         else:
             flash("Username already taken")
@@ -83,6 +84,7 @@ def register():
 @flask_login.login_required
 def logout():
     flask_login.logout_user()
+    flash('You have been logged out.')
     return redirect(url_for('login'))
 
 @app.route('/home', methods=['GET'])
