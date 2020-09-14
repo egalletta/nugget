@@ -1,0 +1,10 @@
+webservice/__pycache__
+webservice/venv
+node/wifi_pw
+node/wifi_ssid
+.vscode
+webservice/templates/bootstrap_studio/nuggetManager.bsdesign
+webservice/__init__.py
+utils/nuggetcli
+node/simple_lcd_test.py
+node/nodemcu_gpio_lcd_test.py

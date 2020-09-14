@@ -2,10 +2,14 @@ from nodemcu_gpio_lcd import GpioLcd
 import urequests
 from time import sleep
 from machine import Pin
+import ubinascii
 
 def start():
     while True:
-        req = urequests.get('http://n-u-g-g-e-t.herokuapp.com/motd').json()
+        data = {
+            'mac': ubinascii.hexlify(network.WLAN().config('mac'),':').decode()
+        }
+        req = urequests.get('http://n-u-g-g-e-t.herokuapp.com/motd', json=data).json()
         for message in req['message-list']:
             lprint(message, 5)
 
