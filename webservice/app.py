@@ -145,7 +145,8 @@ def update(nugget_id):
     data = request.form.listvalues()
     print(data)
     for message in request.form.values():
-        message_list.append(message)
+        if len(message) > 0:
+            message_list.append(message)
     to_update.message_list = message_list
     to_update.save()
     flash('Updated Successfully')
