@@ -31,6 +31,8 @@ class Nugget(db.Document):
     assignee = db.StringField()
     weather_lat = db.StringField()
     weather_lon = db.StringField()
+    display_weather = db.BooleanField()
+    delay = db.IntField()
 
 class User(db.Document, flask_login.UserMixin):
     username = db.StringField(required=True)
@@ -114,9 +116,11 @@ def motd():
     low = int(round(weather_data['daily'][0]['temp']['min']))
     current_conditions = weather_data['daily'][0]['weather'][0]['main'] + " - " + weather_data['daily'][0]['weather'][0]['description']
     weather_string = pad(pad("Low:" + str(low) + " High:" + str(high), 16) + "Now Feels " + str(current_temp) + "°F", 32) + current_conditions
-    message_list.insert(0,weather_string)
+    if nugget_obj['display_weather']:
+        message_list.insert(0,weather_string)
     return {
-        'message-list': message_list
+        'message-list': message_list,
+        'delay': nugget_obj['delay']
     }
 
 def weather(lat, lon):
@@ -148,6 +152,20 @@ def update(nugget_id):
         if len(message) > 0:
             message_list.append(message)
     to_update.message_list = message_list
+    to_update.save()
+    flash('Updated Successfully')
+    return(redirect(url_for('home')))
+
+@app.route('/update-my/<nugget_id>', methods=['POST'])
+def update_my(nugget_id):
+    to_update = Nugget.objects(id=nugget_id).get_or_404()
+    try:
+        to_update['display_weather'] = (request.form['display_weather'] == 'on') 
+    except KeyError:
+        to_update['display_weather'] = False
+    to_update['weather_lat'] = request.form['weather_lat']
+    to_update['weather_lon'] = request.form['weather_lon']
+    to_update['delay'] = request.form['delay']
     to_update.save()
     flash('Updated Successfully')
     return(redirect(url_for('home')))

@@ -8,7 +8,7 @@ def start():
         mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
         req = urequests.get('http://n-u-g-g-e-t.herokuapp.com/motd?mac=' + mac).json()
         for message in req['message-list']:
-            lprint(message, 5)
+            lprint(message, req['delay'])
 
 def lprint(text: str, delay: float):
     try:
