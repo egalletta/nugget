@@ -1,5 +1,4 @@
 import network
-from nodemcu_gpio_lcd import GpioLcd
 import urequests
 from time import sleep
 from machine import Pin
@@ -36,13 +35,19 @@ def do_connect():
     print('network config:', sta_if.ifconfig())
 
 def lprint(s):
-    lcd = GpioLcd(rs_pin=Pin(16),
-                  enable_pin=Pin(5),
-                  d4_pin=Pin(4),
-                  d5_pin=Pin(0),
-                  d6_pin=Pin(2),
-                  d7_pin=Pin(14),
-                  num_lines=2, num_columns=16)
+    try:
+        from nodemcu_gpio_lcd import GpioLcd
+        lcd = GpioLcd(rs_pin=Pin(16),
+                    enable_pin=Pin(5),
+                    d4_pin=Pin(4),
+                    d5_pin=Pin(0),
+                    d6_pin=Pin(2),
+                    d7_pin=Pin(14),
+                    num_lines=2, num_columns=16)
+    except (ImportError, OSError):
+        from nodemcu_gpio_lcd import I2CLcd
+        i2c = I2C(scl=Pin(5), sda=Pin(4), freq=400000)
+        lcd = I2cLcd(i2c, DEFAULT_I2C_ADDR, 2, 16)
     print(s)
     lcd.clear()
     sleep(0.15)
