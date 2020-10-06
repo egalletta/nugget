@@ -14,17 +14,17 @@
             newdiv.className = "form-group"
             newdiv.setAttribute("id", "messages")
             newdiv.innerHTML = `
-                            <div class="form-group input-group" id ="input-${numElements}" name="input-${numElements}">
-                                <input class="form-control" type="text" placeholder='Blank boxes will be omitted'>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-danger" type="button" onClick="removeInput(this.parentElement.parentElement.id)">Remove</button>
-                                </div>
-                            </div>
-                            `;
+            <div class="form-group input-group" id ="message-${numElements}" name="message-${numElements}">
+                <input class="form-control" id="input-${numElements}" name=input-${numElements}" type="text" placeholder='Blank boxes will be omitted'>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-danger" type="button" onClick="removeInput(this.parentElement.parentElement.id)">Remove</button>
+                </div>
+            </div>
+            `;
             document.getElementById(divId).appendChild(newdiv);
-
+            
         }
-
+        
         function removeInput(divId) {
             document.getElementById(divId).remove()
         }
@@ -40,97 +40,97 @@
                 <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
                     <div class="container"><a class="navbar-brand" href="#" style="font-size: 31px;">nuggetManager</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                         <div
-                            class="collapse navbar-collapse" id="navcol-1">
-                            <ul class="nav navbar-nav mr-auto">
-                                <li class="nav-item" role="presentation"></li>
-                                <li class="nav-item" role="presentation"></li>
-                            </ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="/logout">Log Out</a></span></div>
-            </div>
-            </nav>
-            <!-- End: Navigation with Button -->
-        </div>
-    </div>
-    <!-- End: Nav-header -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alert alert-primary" role="alert">
-        <ul class=flashes>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% endwith %}
-    <!-- Start: My Nuggets -->
-    <div class="row" style="padding-top: 12px;">
-        <div class="col">
-            <h3>My Nuggets</h3>
-        </div>
-    </div>
-    <!-- End: My Nuggets -->
-    <!-- Start: My Nugget Content -->
-    <div class="row" style="padding-bottom: 30px;">
-        {% for n in my_nuggets %}
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">{{ n.name }}</h4>
-                    <form action="/update-my/{{ n.id }}" method="POST">
-                        <div class="form-group">
-                            <div class="form-check"><input class="form-check-input" type="checkbox" id="display_weather" name="display_weather" {% if n.display_weather %} checked="checked" {% endif %}><label class="form-check-label" for="formCheck-1">Enable Weather Forecast</label></div>
-                        </div>
-                        <div class="form-group"><label>Latitude:</label><input class="form-control" type="text" id="weather_lat" name="weather_lat" value="{{ n.weather_lat }}"></div>
-                        <div class="form-group"><label>Longitude:</label><input class="form-control" type="text" id="weather_lon" name="weather_lon" value="{{ n.weather_lon }}"></div>
-                        <div class="form-group"><label>Message Delay (seconds between each message):</label><input class="form-control" type="number" name="delay" id="delay" value="{{ n.delay }}"></div><button class="btn btn-primary" type="submit">Save Changes</button></form>
-                </div>
+                        class="collapse navbar-collapse" id="navcol-1">
+                        <ul class="nav navbar-nav mr-auto">
+                            <li class="nav-item" role="presentation"></li>
+                            <li class="nav-item" role="presentation"></li>
+                        </ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="/logout">Log Out</a></span></div>
+                    </div>
+                </nav>
+                <!-- End: Navigation with Button -->
             </div>
         </div>
-        {% endfor %}
-    </div>
-    <!-- End: My Nugget Content -->
-    <!-- Start: My Managed Nuggets -->
-    <div class="row" style="padding-top: 12px;">
-        <div class="col">
-            <h3>My Managed Nuggets</h3>
+        <!-- End: Nav-header -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-primary" role="alert">
+            <ul class=flashes>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
         </div>
-    </div>
-    <!-- End: My Managed Nuggets -->
-    <!-- Start: My Managed Nuggets -->
-    <div class="row" style="padding-bottom: 100px;">
-        {% for nugget in managed_nuggets %}
-        {% if managed_nuggets|length < 1 %}
-        <p>No nuggets found!</p>
         {% endif %}
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">{{ nugget.name }}</h4>
-                    <h6 class="card-subtitle"> for {{ nugget.assignee }}</h6>
-                    <form action="/update/{{ nugget.id }}" method='POST'>
-                        <div id='message-form'>
-                            {% for message in nugget.message_list %}
-                            <div class="form-group input-group" id="message-{{loop.index0}}">
-                                <input class="form-control" id ="{{ message }}" name="{{ message }}" type="text" value="{{ message }}" placeholder='Blank boxes will be omitted'>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-danger" type="button" onClick="removeInput(this.parentElement.parentElement.id)">Remove</button>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <button class="btn btn-primary" type="button" onClick="addInput('message-form');" style="width: 62px;height: 37px;">Add</button>
-                        <button
-                            class="btn btn-primary" type="submit">Save Changes</button>
-                    </form>
-                </div>
+        {% endwith %}
+        <!-- Start: My Nuggets -->
+        <div class="row" style="padding-top: 12px;">
+            <div class="col">
+                <h3>My Nuggets</h3>
             </div>
         </div>
-        {% endfor %}
-    </div>
-    <!-- End: My Managed Nuggets -->
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+        <!-- End: My Nuggets -->
+        <!-- Start: My Nugget Content -->
+        <div class="row" style="padding-bottom: 30px;">
+            {% for n in my_nuggets %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ n.name }}</h4>
+                        <form action="/update-my/{{ n.id }}" method="POST">
+                            <div class="form-group">
+                                <div class="form-check"><input class="form-check-input" type="checkbox" id="display_weather" name="display_weather" {% if n.display_weather %} checked="checked" {% endif %}><label class="form-check-label" for="formCheck-1">Enable Weather Forecast</label></div>
+                            </div>
+                            <div class="form-group"><label>Latitude:</label><input class="form-control" type="text" id="weather_lat" name="weather_lat" value="{{ n.weather_lat }}"></div>
+                            <div class="form-group"><label>Longitude:</label><input class="form-control" type="text" id="weather_lon" name="weather_lon" value="{{ n.weather_lon }}"></div>
+                            <div class="form-group"><label>Message Delay (seconds between each message):</label><input class="form-control" type="number" name="delay" id="delay" value="{{ n.delay }}"></div><button class="btn btn-primary" type="submit">Save Changes</button></form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- End: My Nugget Content -->
+            <!-- Start: My Managed Nuggets -->
+            <div class="row" style="padding-top: 12px;">
+                <div class="col">
+                    <h3>My Managed Nuggets</h3>
+                </div>
+            </div>
+            <!-- End: My Managed Nuggets -->
+            <!-- Start: My Managed Nuggets -->
+            <div class="row" style="padding-bottom: 100px;">
+                {% for nugget in managed_nuggets %}
+                {% if managed_nuggets|length < 1 %}
+                <p>No nuggets found!</p>
+                {% endif %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ nugget.name }}</h4>
+                            <h6 class="card-subtitle"> for {{ nugget.assignee }}</h6>
+                            <form action="/update/{{ nugget.id }}" method='POST'>
+                                <div id='message-form'>
+                                    {% for message in nugget.message_list %}
+                                    <div class="form-group input-group" id="message-{{loop.index0}}">
+                                        <input class="form-control" id ="input-{{loop.index0}}" name="input-{{loop.index0}}" type="text" value="{{ message }}" placeholder='Blank boxes will be omitted'>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-danger" type="button" onClick="removeInput(this.parentElement.parentElement.id)">Remove</button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="btn btn-primary" type="button" onClick="addInput('message-form');" style="width: 62px;height: 37px;">Add</button>
+                                <button
+                                class="btn btn-primary" type="submit">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- End: My Managed Nuggets -->
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    </body>
+    
+    </html>

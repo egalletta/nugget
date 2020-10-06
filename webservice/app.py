@@ -1,10 +1,13 @@
-from flask import Flask, request, flash, url_for, render_template, redirect
-from flask_mongoengine import MongoEngine
 import os
-import requests
 import time
-import flask_login
+
 import bcrypt
+import flask_login
+import requests
+from flask import Flask, flash, redirect, render_template, request, url_for
+from flask_mongoengine import MongoEngine
+from nugget import Nugget
+from user import User
 
 app = Flask(__name__)
 app.config['MONGODB_SETTINGS'] = {
@@ -18,25 +21,10 @@ login_manager.init_app(app)
 WEATHER_API_KEY = os.environ.get('WEATHER_KEY')
 
 cached_weather = {
-    'time': None,
+    'time': None, 
     'report': None
 }
 
-class Nugget(db.Document):
-    target = db.StringField(required=True)
-    message_list = db.ListField(db.StringField())
-    name = db.StringField()
-    mac = db.StringField()
-    assigner = db.StringField()
-    assignee = db.StringField()
-    weather_lat = db.StringField()
-    weather_lon = db.StringField()
-    display_weather = db.BooleanField()
-    delay = db.IntField()
-
-class User(db.Document, flask_login.UserMixin):
-    username = db.StringField(required=True)
-    password = db.StringField(required=True)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -144,7 +132,7 @@ def pad(s, n):
 
 @app.route('/update/<nugget_id>', methods=['POST'])
 def update(nugget_id):
-    to_update = Nugget.objects(id=nugget_id).get_or_404()
+    to_update = Nugget.objects(id=nugget_id).first()
     message_list = []
     data = request.form.listvalues()
     print(data)
