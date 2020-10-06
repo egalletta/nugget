@@ -8,31 +8,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/styles.min.css">
     <script>
-        var counter = 1;
+        function addInput(divId) {
+            var newdiv = document.createElement('div');
+            var numElements = document.getElementById(divId).parentElement.elements.length; 
+            newdiv.className = "form-group"
+            newdiv.setAttribute("id", "messages")
+            newdiv.innerHTML = `
+                            <div class="form-group input-group" id ="input-${numElements}" name="input-${numElements}">
+                                <input class="form-control" type="text" placeholder='Blank boxes will be omitted'>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-danger" type="button" onClick="removeInput(this.parentElement.parentElement.id)">Remove</button>
+                                </div>
+                            </div>
+                            `;
+            document.getElementById(divId).appendChild(newdiv);
 
-        var limit = 10;
+        }
 
-        function addInput(divName){
-
-            if (counter == limit)  {
-
-                alert("You have reached the limit of adding " + counter + " inputs");
-
-            }
-
-            else {
-
-                var newdiv = document.createElement('div');
-                newdiv.className = "form-group"
-                newdiv.setAttribute("id", "messages")
-                newdiv.innerHTML = "<input class='form-control' type='text' id='additional_message' name='additional_message' placeholder='Blank boxes will be omitted'>";
-
-                document.getElementById(divName).appendChild(newdiv);
-
-                counter++;
-
-            }
-
+        function removeInput(divId) {
+            document.getElementById(divId).remove()
         }
     </script>
 </head>
@@ -116,7 +110,12 @@
                     <form action="/update/{{ nugget.id }}" method='POST'>
                         <div id='message-form'>
                             {% for message in nugget.message_list %}
-                            <div class="form-group"><input class="form-control" id ="{{ message }}" name="{{ message }}" type="text" value="{{ message }}" placeholder='Blank boxes will be omitted'></div>
+                            <div class="form-group input-group" id="message-{{loop.index0}}">
+                                <input class="form-control" id ="{{ message }}" name="{{ message }}" type="text" value="{{ message }}" placeholder='Blank boxes will be omitted'>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-danger" type="button" onClick="removeInput(this.parentElement.parentElement.id)">Remove</button>
+                                </div>
+                            </div>
                             {% endfor %}
                         </div>
                         <button class="btn btn-primary" type="button" onClick="addInput('message-form');" style="width: 62px;height: 37px;">Add</button>
