@@ -1,4 +1,5 @@
 from mongoengine import Document, StringField, ListField, BooleanField, IntField
+from mongoengine.fields import DictField
 
 class Nugget(Document):
     target = StringField(required=True)
@@ -11,3 +12,4 @@ class Nugget(Document):
     weather_lon = StringField()
     display_weather = BooleanField()
     delay = IntField()
+    cached_weather = DictField()

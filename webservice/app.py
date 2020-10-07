@@ -4,8 +4,9 @@ import time
 import bcrypt
 import flask_login
 import requests
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for, abort
 from flask_mongoengine import MongoEngine
+from werkzeug.exceptions import NotFound
 from nugget import Nugget
 from user import User
 
@@ -19,12 +20,6 @@ db = MongoEngine(app)
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 WEATHER_API_KEY = os.environ.get('WEATHER_KEY')
-
-cached_weather = {
-    'time': None, 
-    'report': None
-}
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -89,15 +84,17 @@ def home():
 @app.route('/motd', methods=['GET'])
 def motd():
     mac = request.args['mac']
-    nugget_obj = Nugget.objects(mac=mac).first_or_404()
+    nugget_obj = Nugget.objects(mac=mac).first()
+    if nugget_obj == None:
+        abort(404)
     message_list = nugget_obj['message_list']
     lat = nugget_obj['weather_lat']
     lon = nugget_obj['weather_lon']
-
-    if cached_weather['report'] is None or (time.time() - cached_weather['time']) >= 180:
+    cached_weather = nugget_obj['cached_weather']
+    if nugget_obj['display_weather'] and ('report' not in cached_weather or (time.time() - cached_weather['time']) >= 180):
         cached_weather['time'] = time.time()
         cached_weather['report'] = weather(lat, lon)
-        
+    nugget_obj.save()    
     weather_data = cached_weather['report']
     current_temp = int(round(weather_data['current']['feels_like']))
     high = int(round(weather_data['daily'][0]['temp']['max']))
@@ -110,25 +107,6 @@ def motd():
         'message-list': message_list,
         'delay': nugget_obj['delay']
     }
-
-def weather(lat, lon):
-    params= {
-        'lat': lat,
-        'lon': lon,
-        'exclude': 'minutely,hourly',
-        'units': 'imperial',
-        'appid': WEATHER_API_KEY
-    }
-    weather = requests.get('https://api.openweathermap.org/data/2.5/onecall', params=params)
-    return weather.json()
-
-def pad(s, n):
-    s = str(s)
-    if len(s) >= n:
-        return s[:n]
-    else:
-        to_add = n - len(s)
-        return s + str(" " * to_add)
 
 @app.route('/update/<nugget_id>', methods=['POST'])
 def update(nugget_id):
@@ -157,6 +135,25 @@ def update_my(nugget_id):
     to_update.save()
     flash('Updated Successfully')
     return(redirect(url_for('home')))
+
+def weather(lat, lon):
+    params= {
+        'lat': lat,
+        'lon': lon,
+        'exclude': 'minutely,hourly',
+        'units': 'imperial',
+        'appid': WEATHER_API_KEY
+    }
+    weather = requests.get('https://api.openweathermap.org/data/2.5/onecall', params=params)
+    return weather.json()
+
+def pad(s, n):
+    s = str(s)
+    if len(s) >= n:
+        return s[:n]
+    else:
+        to_add = n - len(s)
+        return s + str(" " * to_add)
 
 if __name__ == '__main__':
    app.run()
