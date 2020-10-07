@@ -6,8 +6,10 @@ import ubinascii
 def start():
     while True:
         mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
-        req = urequests.get('http://nugget.galletta.xyz/motd?mac=' + mac).json()
-        for message in req['message-list']:
+        req = urequests.get('http://nugget.galletta.xyz/motd?mac=' + mac)
+        data = req.json()
+        req.close()
+        for message in data['message-list']:
             lprint(message, req['delay'])
 
 def lprint(text: str, delay: float):
