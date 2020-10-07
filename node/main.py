@@ -10,7 +10,7 @@ def start():
         data = req.json()
         req.close()
         for message in data['message-list']:
-            lprint(message, req['delay'])
+            lprint(message, data['delay'])
 
 def lprint(text: str, delay: float):
     try:
