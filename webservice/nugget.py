@@ -1,5 +1,4 @@
-from mongoengine import Document, StringField, ListField, BooleanField, IntField
-from mongoengine.fields import DictField
+from mongoengine import Document, StringField, ListField, BooleanField, IntField, DictField
 
 class Nugget(Document):
     target = StringField(required=True)

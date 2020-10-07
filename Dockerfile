@@ -1,4 +1,4 @@
-FROM python:rc-slim-buster
+FROM python:3.8.6-slim-buster
 COPY ./webservice /app
 WORKDIR /app
 RUN apt-get update
