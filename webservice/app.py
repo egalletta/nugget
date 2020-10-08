@@ -95,13 +95,13 @@ def motd():
         cached_weather['time'] = time.time()
         cached_weather['report'] = weather(lat, lon)
     nugget_obj.save()    
-    weather_data = cached_weather['report']
-    current_temp = int(round(weather_data['current']['feels_like']))
-    high = int(round(weather_data['daily'][0]['temp']['max']))
-    low = int(round(weather_data['daily'][0]['temp']['min']))
-    current_conditions = weather_data['daily'][0]['weather'][0]['main'] + " - " + weather_data['daily'][0]['weather'][0]['description']
-    weather_string = pad(pad("Low:" + str(low) + " High:" + str(high), 16) + "Now Feels " + str(current_temp) + "°F", 32) + current_conditions
     if nugget_obj['display_weather']:
+        weather_data = cached_weather['report']
+        current_temp = int(round(weather_data['current']['feels_like']))
+        high = int(round(weather_data['daily'][0]['temp']['max']))
+        low = int(round(weather_data['daily'][0]['temp']['min']))
+        current_conditions = weather_data['daily'][0]['weather'][0]['main'] + " - " + weather_data['daily'][0]['weather'][0]['description']
+        weather_string = pad(pad("Low:" + str(low) + " High:" + str(high), 16) + "Now Feels " + str(current_temp) + "°F", 32) + current_conditions
         message_list.insert(0,weather_string)
     return {
         'message-list': message_list,
