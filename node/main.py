@@ -1,16 +1,32 @@
-import urequests
 from time import sleep
-from machine import Pin
+
 import ubinascii
+import urequests
+from machine import Pin, reset
+
 
 def start():
     while True:
+<<<<<<< HEAD
         mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
         req = urequests.get('https://nugget.galletta.xyz/motd?mac=' + mac)
         data = req.json()
         req.close()
         for message in data['message-list']:
             lprint(message, data['delay'])
+=======
+        try:
+            mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
+            req = urequests.get('http://nugget.galletta.xyz/motd?mac=' + mac)
+            data = req.json()
+            req.close()
+            for message in data['message-list']:
+                lprint(message, req['delay'])
+        # Need to change this once specific error is known        
+        except:
+            lprint('Unexpected errorRebooting...')
+            reset()
+>>>>>>> 4b30f90... implement naive error recovery
 
 def lprint(text: str, delay: float):
     try:
@@ -23,8 +39,10 @@ def lprint(text: str, delay: float):
                     d7_pin=Pin(14),
                     num_lines=2, num_columns=16)
     except (ImportError, OSError):
-        from nodemcu_gpio_lcd import I2cLcd
         from machine import I2C
+
+        from nodemcu_gpio_lcd import I2cLcd
+
         # The PCF8574 has a jumper selectable address: 0x20 - 0x27
         DEFAULT_I2C_ADDR = 0x27
         i2c = I2C(scl=Pin(5), sda=Pin(4), freq=400000)
