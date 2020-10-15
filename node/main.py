@@ -7,14 +7,6 @@ from machine import Pin, reset
 
 def start():
     while True:
-<<<<<<< HEAD
-        mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
-        req = urequests.get('https://nugget.galletta.xyz/motd?mac=' + mac)
-        data = req.json()
-        req.close()
-        for message in data['message-list']:
-            lprint(message, data['delay'])
-=======
         try:
             mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
             req = urequests.get('http://nugget.galletta.xyz/motd?mac=' + mac)
@@ -26,7 +18,6 @@ def start():
         except:
             lprint('Unexpected errorRebooting...')
             reset()
->>>>>>> 4b30f90... implement naive error recovery
 
 def lprint(text: str, delay: float):
     try:
