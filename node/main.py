@@ -15,8 +15,9 @@ def start():
             for message in data['message-list']:
                 lprint(message, req['delay'])
         # Need to change this once specific error is known        
-        except:
-            lprint('Unexpected errorRebooting...')
+        except Exception as e:
+            print(e)
+            lprint('Unexpected errorRebooting...', 3)
             reset()
 
 def lprint(text: str, delay: float):
