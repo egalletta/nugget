@@ -13,7 +13,7 @@ def start():
             data = req.json()
             req.close()
             for message in data['message-list']:
-                lprint(message, req['delay'])
+                lprint(message, data['delay'])
         # Need to change this once specific error is known        
         except Exception as e:
             print(e)
