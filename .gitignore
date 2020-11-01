@@ -8,3 +8,5 @@ webservice/__init__.py
 utils/nuggetcli
 node/simple_lcd_test.py
 node/nodemcu_gpio_lcd_test.py
+.env
+docker-compose.yml
