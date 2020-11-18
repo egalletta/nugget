@@ -181,7 +181,7 @@ def update(nugget_id):
 
 @app.route('/update-my/<nugget_id>', methods=['POST'])
 def update_my(nugget_id):
-    to_update = Nugget.objects(id=nugget_id).get_or_404()
+    to_update = Nugget.objects(id=nugget_id).get()
     try:
         to_update['display_weather'] = (request.form['display_weather'] == 'on') 
     except KeyError:
