@@ -7,6 +7,7 @@
     <title>nuggetManager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/styles.min.css">
+    <link rel="stylesheet" href="static/home.css">
     <script>
         function addInput(divId) {
             var newdiv = document.createElement('div');
@@ -29,6 +30,7 @@
             document.getElementById(divId).remove()
         }
     </script>
+    <script src="{{url_for('static', filename='home.js')}}"></script>
 </head>
 
 <body>
@@ -72,7 +74,7 @@
         <!-- Start: My Nugget Content -->
         <div class="row" style="padding-bottom: 30px;">
             {% for n in my_nuggets %}
-            <div class="col">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">{{ n.name }}</h4>
@@ -102,7 +104,7 @@
                 {% if managed_nuggets|length < 1 %}
                 <p>No nuggets found!</p>
                 {% endif %}
-                <div class="col">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">{{ nugget.name }}</h4>

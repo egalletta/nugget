@@ -8,6 +8,7 @@ import flask_login
 import requests
 from flask import Flask, flash, redirect, render_template, request, url_for, abort, session
 from flask_mongoengine import MongoEngine
+from flask_cors import CORS, cross_origin
 from werkzeug.exceptions import NotFound
 from nugget import Nugget, DiscoveredNugget
 from user import User
@@ -17,6 +18,7 @@ app.config['MONGODB_SETTINGS'] = {
     'db': 'nugget',
     'host': os.environ.get('MONGOSTR')
 }
+cors = CORS(app)
 app.secret_key = os.environ.get('SECRET_KEY')
 db = MongoEngine(app)
 login_manager = flask_login.LoginManager()
@@ -86,6 +88,7 @@ def home():
         return render_template('home.html', my_nuggets=my_nuggets, managed_nuggets=managed_nuggets)
 
 @app.route('/motd', methods=['GET'])
+@cross_origin
 def motd():
     mac = request.args['mac']
     nugget_obj = Nugget.objects(mac=mac).first()
