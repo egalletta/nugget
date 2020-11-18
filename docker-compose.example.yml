@@ -1,0 +1,23 @@
+version: "3.3"
+
+services:
+
+  nugget:
+    image: egalletta/nugget:arm64-development
+    environment:
+      - MONGOSTR=
+      - SECRET_KEY=
+      - WEATHER_KEY=
+    restart: always
+    networks:
+      - public
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.nugget.entrypoints=web-secured"
+        - "traefik.http.routers.nugget.rule=Host(`nugget.galletta.xyz`)"
+        - "traefik.http.routers.nugget.tls=true"
+        - "traefik.http.services.nugget.loadbalancer.server.port=80"
+networks:
+  public:
+    external: true

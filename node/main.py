@@ -9,14 +9,15 @@ def start():
     while True:
         try:
             mac = ubinascii.hexlify(network.WLAN().config('mac'),':').decode().replace(':','')
-            req = urequests.get('http://nugget.galletta.xyz/motd?mac=' + mac)
+            req = urequests.get('https://nugget.galletta.xyz/motd?mac=' + mac)
             data = req.json()
             req.close()
             for message in data['message-list']:
-                lprint(message, req['delay'])
+                lprint(message, data['delay'])
         # Need to change this once specific error is known        
-        except:
-            lprint('Unexpected errorRebooting...')
+        except Exception as e:
+            print(e)
+            lprint('Unexpected errorRebooting...', 3)
             reset()
 
 def lprint(text: str, delay: float):
