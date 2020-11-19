@@ -17,7 +17,6 @@ app.config['MONGODB_SETTINGS'] = {
     'db': 'nugget',
     'host': os.environ.get('MONGOSTR')
 }
-cors = CORS(app)
 app.secret_key = os.environ.get('SECRET_KEY')
 db = MongoEngine(app)
 login_manager = flask_login.LoginManager()
