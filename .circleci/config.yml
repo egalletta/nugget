@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: cimg/base:2020.01
+    resource_class: small
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "a5:d1:ba:e7:d4:04:90:01:1c:c6:b6:39:f4:1e:e9:5a"
+      - run: "ssh -o \"StrictHostKeyChecking=no\" -p 99 egalletta@saturn.galletta.xyz /home/egalletta/circleci/enzo.galletta.xyz/build_image.sh"
+  deploy:
+    docker:
+      - image: cimg/base:2020.01
+    resource_class: small
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "a5:d1:ba:e7:d4:04:90:01:1c:c6:b6:39:f4:1e:e9:5a"
+      - run: "ssh -o \"StrictHostKeyChecking=no\" -p 99 egalletta@saturn.galletta.xyz /home/egalletta/circleci/enzo.galletta.xyz/update_service.sh"
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
